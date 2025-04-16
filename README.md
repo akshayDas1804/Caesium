@@ -24,7 +24,11 @@ Caesium is an open-source image compressor designed to reduce file size without 
 - [Build & Installer Scripts](#build--installer-scripts)
 - [Data Structures Overview](#data-structures-overview)
 - [Why Qt and Not STL?](#why-qt-and-not-stl)
-
+- [CompressorService Logic Walkthrough](#compressorservice-logic-walkthrough)
+- [Future Scope](#future-scope)
+- [File-Level Summary (src)](#file-level-summary-src)
+- [Summary](#summary)
+- [Contributors](#contributors)
 ---
 
 # 🔧 GitHub Config Files
@@ -149,15 +153,52 @@ The `tests/` folder contains automated tests using Qt’s test framework. It lik
 
 # 🔎 Why Qt and Not STL?
 
-| Reason | Qt | STL |
-|--------|-----|-----|
-| GUI Integration | ✔️ Signals/slots, QML, QStrings | ❌ Manual wiring needed |
-| Copy-on-Write | ✔️ Efficient sharing | ❌ Deep copies required |
-| App Settings | ✔️ QSettings | ❌ No built-in alternative |
-| Event Handling | ✔️ Built-in (signals) | ❌ Manual callbacks |
-| Resource Bundling | ✔️ `.qrc` + icons | ❌ Not applicable |
+Qt offers:
+- Native integration with GUI components
+- Efficient resource handling with `.qrc`
+- Implicit sharing for better memory performance
+- Simplified settings and event management (e.g., `QSettings`, `signals/slots`)
 
-Qt is preferred for GUI-heavy apps like Caesium because it reduces boilerplate, integrates tightly with Qt Designer, and improves developer productivity.
+STL is still used internally for isolated performance-focused logic, but Qt offers better synergy for UI development.
+
+---
+
+# 📂 File-Level Summary (src)
+
+| File | Purpose |
+|------|---------|
+| main.cpp | Launches Qt app, sets up translation |
+| MainWindow.cpp/h | Main GUI controller and events |
+| CompressorService.cpp | Prepares image params, calls Rust lib, saves output |
+| FileListModel.cpp | Stores and updates list of images + compression state |
+| ImagePreview.cpp | Displays thumbnails or side-by-side compression preview |
+| FileItemDelegate.cpp | Customizes how file list rows are rendered (e.g., progress bars) |
+| Updater.cpp | Checks for version updates (used by network module) |
+| SparkleUpdater.mm | macOS-specific update framework support |
+
+---
+
+# 🔍 CompressorService Logic Walkthrough
+
+The `CompressorService.cpp` file is central to compression logic. Here’s how it works:
+
+1. **Input Collection**
+   - Gathers file paths, output folders, and user-defined settings (quality, resize, lossless flag).
+
+2. **Parameter Construction**
+   - Fills a `CompressorSettings` struct with image-specific compression parameters.
+   - Converts Qt types (QString, QSize) to C-compatible types for FFI.
+
+3. **Rust Backend Call**
+   - Uses C-style function (from `libcaesium`) to invoke compression routine.
+   - Handles FFI bridge using `extern "C"` definitions.
+
+4. **Error Handling**
+   - Checks the return value from backend call.
+   - If error, emits a signal with failure info (displayed to user).
+
+5. **Progress Reporting**
+   - Emits signals during and after compression to update UI (file list model + preview).
 
 ---
 
@@ -174,9 +215,43 @@ Compression quality can be set via UI, and preview functionality helps users see
 
 ---
 
-# 🧠 Summary
+# 💡 Developer & Power User Ideas
 
-Caesium Image Compressor is a Qt-powered, cross-platform GUI built for efficient image compression using a performant Rust backend. Its modular structure and strong use of Qt's features make it a powerful, developer-friendly application for real-world desktop use.
+## 💻 For Developers / Contributors
 
-Want to dive deeper into a specific folder, view architecture diagrams, or walk through function logic in files like `CompressorService.cpp` or `MainWindow.cpp`? Let me know!
+1. **Support More File Formats**: Add AVIF, HEIC via `libavif`, `libheif`
+2. **Smarter Compression Suggestions**: Auto-suggest lossy/lossless based on image type
+3. **Parallelism / GPU Acceleration**: Use OpenCL/Vulkan for faster batch jobs
+4. **Plugin Architecture**: Add custom exporters (e.g., Imgur, Dropbox)
+
+## 🖼 Future Scope
+
+5. **Advanced Resize**: Smart crop, watermark, aspect-ratio locks
+6. **Presets + Automation**: Save configs like "Web Export", allow batch scripting
+7. **Scheduled Compression**: Like cron — auto compress on schedule
+
+## 🌐 UI / UX Enhancements
+
+8. **Live Preview**: Side-by-side before/after view
+9. **Tooltips & Sliders**: Explain lossy/lossless visually
+10. **Drag + Shell Integration**: Right-click compress with Caesium
+
+## ☁️ Cloud & Web Features
+
+11. **Cloud Sync/CDN Export**: Auto-upload to S3, Netlify, Firebase
+12. **HTML Comparison Report**: Visual + size diff reports for sharing
+
+## 🧪 Experimental
+
+13. **AI Compression**: Use ML to retain perceptual detail at low sizes
+14. **Real-Time Webcam/Screenshot Compression**: Auto-optimize screen captures
+
+---
+
+## Contributors
+- Aaditya Kaushik - 202401001
+- Akshay Das - 202401011
+- Darsh Valand - 202401045
+- Harshit Goyal - 202401065
+
 
