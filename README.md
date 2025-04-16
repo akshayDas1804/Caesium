@@ -1,250 +1,186 @@
-# 🗜️ Caesium Image Compressor
+# 🖼️ Caesium Image Compressor
 
-**Caesium** is an open-source, cross-platform image compressor that optimizes JPEG, PNG, and WebP images using both lossy and lossless techniques. Designed for speed, privacy, and usability — Caesium is perfect for batch compression without sending your files to the cloud.
+[![Build Status](https://img.shields.io/github/actions/workflow/status/Lymphatus/caesium-image-compressor/build-qt.yml?branch=master)](https://github.com/Lymphatus/caesium-image-compressor/actions)
+[![License](https://img.shields.io/github/license/Lymphatus/caesium-image-compressor)](LICENSE)
+[![Platforms](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-blue)](https://github.com/Lymphatus/caesium-image-compressor/releases)
+[![Web Demo](https://img.shields.io/badge/Demo-caesium.app-brightgreen)](https://caesium.app)
+[![Contributors](https://img.shields.io/github/contributors/Lymphatus/caesium-image-compressor)](https://github.com/Lymphatus/caesium-image-compressor/graphs/contributors)
 
-<p align="center">
-  <img src="https://img.shields.io/github/stars/Lymphatus/caesium-image-compressor?style=social" />
-  <img src="https://img.shields.io/github/workflow/status/Lymphatus/caesium-image-compressor/Build" />
-  <img src="https://img.shields.io/github/license/Lymphatus/caesium-image-compressor" />
-</p>
+![Caesium UI Screenshot](https://raw.githubusercontent.com/Lymphatus/caesium-image-compressor/master/resources/screenshots/main_window.png)
 
 ---
 
 ## ❓ What is Caesium?
 
-Caesium is a native image compression tool that reduces image size while preserving quality. Unlike cloud-based compressors like TinyPNG or Squoosh, Caesium works entirely offline — no uploads, no data collection.
+Caesium is an open-source image compressor designed to reduce file size without compromising quality. It supports batch processing, drag-and-drop UI, and both lossy/lossless modes for formats like JPEG, PNG, and WebP.
 
-### ✅ Key Features:
-- 🖥 **Cross-platform GUI** built with **Qt (C++)**
-- ⚙️ **Rust backend (libcaesium)** for fast, safe compression
-- 📂 **Batch processing** with drag-and-drop support
-- 🌍 **Multilingual UI** (18+ languages)
-- 🔐 **Privacy-first**: No cloud uploads, works fully offline
+- Cross-platform GUI built in **C++ with Qt**
+- Rust backend using **libcaesium** for high-performance compression
+- Supports **translations, custom icons, persistent settings**, and native integration with macOS and Windows
 
 ---
 
 ## 📚 Table of Contents
 
-- [GitHub Config Files](#github-config-files)
-- [IDE Configuration (.idea)](#ide-configuration-idea)
+- [GitHub Config Files](#-github-config-files)
+- [IDE Configuration (.idea)](#-ide-configuration-idea)
 - [Resources Folder](#resources-folder)
 - [Core Source Code (src)](#core-source-code-src)
 - [Test Suite](#test-suite)
 - [Build & Installer Scripts](#build--installer-scripts)
 - [Data Structures Overview](#data-structures-overview)
 - [Why Qt and Not STL?](#why-qt-and-not-stl)
-- [Compression Modes](#compression-modes)
 - [CompressorService Logic Walkthrough](#compressorservice-logic-walkthrough)
-- [Performance & Optimization](#performance--optimization)
-- [Internationalization (i18n)](#internationalization-i18n)
-- [Trade-offs & Design Decisions](#trade-offs--design-decisions)
+- [Compression Modes](#compression-modes)
+- [Developer & Power User Ideas](#developer--power-user-ideas)
 - [Future Scope](#future-scope)
 - [File-Level Summary (src)](#file-level-summary-src)
-- [Installation](#installation)
+- [Summary](#summary)
 - [Contributors](#contributors)
-- [License](#license)
 
 ---
 
 ## 🔧 GitHub Config Files
 
-- `.github/FUNDING.yml` – Enable GitHub Sponsors / PayPal
-- `.github/workflows/build-qt.yml` – CI setup for Windows/Linux builds
-- `.github/ISSUE_TEMPLATE/` – Templates for bug reports and feature requests
+### `.github/FUNDING.yml`
+- Enables GitHub Sponsors or custom donation links
+
+### `.github/workflows/build-qt.yml`
+- GitHub Actions CI for Windows and Linux builds
+
+### `.github/ISSUE_TEMPLATE`
+- Templates for bugs, features, and general issues
 
 ---
 
 ## 🧠 IDE Configuration (.idea)
 
-JetBrains IDE configs (optional) for formatting, Clang-Tidy, VCS settings, Qt path management, etc.
+| File | Purpose |
+|------|---------|
+| Project_Default.xml | Clang-Tidy inspection |
+| codeStyleConfig.xml | C++/Markdown formatting |
+| editor.xml | Severity control |
+| QtSettings.xml | Qt path setup |
+| vcs.xml | VCS integration |
+| modules.xml, .iml | JetBrains project data |
+| misc.xml | CMake & Python config |
 
 ---
 
 ## 📁 Resources Folder
 
-| Path               | Description                           |
-|--------------------|---------------------------------------|
-| `i18n/`            | `.ts` translation files               |
-| `icons/`           | App icons (.svg, .ico)                |
-| `resources.qrc`    | Qt resource bundler                   |
-| `style.manifest`   | Windows styles                        |
-| `icons.rc`         | Windows icon linker                   |
+| File/Folder | Description |
+|-------------|-------------|
+| `i18n/` | Multilingual translations (.ts) |
+| `icons/` | App icons (.svg, .ico) |
+| `resources.qrc` | Qt resource bundler |
+| `icons.rc` | Windows icon bundler |
 
 ---
 
 ## 🧩 Core Source Code (src)
 
-### 📌 Top-Level
-- `main.cpp` – App entry point
-- `MainWindow.cpp/h` – Core UI logic
+- `main.cpp`: App entry
+- `MainWindow.cpp/h`: UI logic
 
-### 📁 dialogs/
-- `AboutDialog`, `PreferencesDialog` – GUI settings & info
+### Dialogs
+- `AboutDialog`, `PreferencesDialog`
 
-### 📁 exceptions/
-- `FileException` – Error handling class
+### Services
+- `CompressorService.cpp`: Calls Rust
 
-### 📁 filters/
-- `ExtensionFilter.cpp` – Filters unsupported files
+### Models/Utils
+- `FileListModel`, `FileUtils.cpp`, `ImagePreview`
 
-### 📁 models/
-- `FileListModel.cpp` – Tracks file list + status
+### Delegates
+- `FileItemDelegate`: Custom table views
 
-### 📁 network/
-- `Updater.cpp` – Checks for new versions
-
-### 📁 services/
-- `CompressorService.cpp` – Interfaces with Rust backend
-
-### 📁 utils/
-- `FileUtils.cpp` – Filesystem and permission helpers
-
-### 📁 widgets/
-- `ImagePreview.cpp` – UI component for side-by-side views
-
-### 📁 delegates/
-- `FileItemDelegate.cpp` – Custom renderer for table/list
-
-### 📁 updater/
-- `SparkleUpdater.mm` – macOS auto-updates (Sparkle)
+### Updaters
+- `Updater.cpp`, `SparkleUpdater.mm`
 
 ---
 
 ## 🧪 Test Suite
 
-Includes:
-- ✅ Unit tests for core services
-- 🔁 Integration tests (UI + backend)
-- 🧪 GUI tests for widgets
+- Unit, integration, and GUI tests using Qt Test
 
 ---
 
 ## ⚙️ Build & Installer Scripts
 
-| Script/File        | Role                            |
-|--------------------|----------------------------------|
-| `CMakeLists.txt`   | Build setup (Qt + Rust)          |
-| `libcaesium.conf`  | Rust build config                |
-| `qt.conf`          | Portable Qt path helper          |
-| `Info.plist`       | macOS bundle info                |
-| `setup.iss`        | Inno Setup script for Windows    |
+| File | Role |
+|------|------|
+| `CMakeLists.txt` | Core build logic |
+| `libcaesium.conf` | Rust lib caching |
+| `Info.plist` | macOS metadata |
+| `qt.conf` | Qt portable build |
+| `setup.iss` | Windows installer |
 
 ---
 
 ## 🧱 Data Structures Overview
 
-### Qt (Frontend)
-| Type | Use |
-|------|-----|
-| `QList<CImage>` | Image list for batch processing |
-| `QSettings` | User preferences |
-| `QFuture<void>` | Multithreaded compression |
-| `QMap`, `QStandardItemModel` | UI tables and filters |
+### Qt Types
 
-### Rust (Backend)
-- `Vec<T>`, `HashMap<K,V>`
-- FFI types: `c_char`, `c_int`
-- Core function:
-```rust
-#[no_mangle]
-pub extern "C" fn caesium_compress_image(input: *const c_char, output: *const c_char, quality: c_int) -> bool;
-```
+| Qt | STL | Use |
+|----|-----|-----|
+| `QVector`, `QList` | `vector`, `list` | File lists |
+| `QMap`, `QHash` | `map`, `unordered_map` | Mapping settings |
+| `QSettings` | — | Persistent configs |
+| `QStandardItemModel` | — | Model/View UI |
+
+### Rust Types
+- `Vec<T>`, `HashMap<K, V>`, structs for compression params
 
 ---
 
 ## 🔎 Why Qt and Not STL?
 
-**Qt** is used instead of STL in many places due to:
-- Native GUI widget integration
-- `signals/slots` for real-time updates
-- Easier internationalization
-- Implicit data sharing (memory-efficient)
-
-**STL** is still used in performance-critical sections.
+Qt offers signals/slots, `.qrc` asset bundling, implicit sharing, and native GUI rendering. STL is used where direct performance is needed.
 
 ---
 
 ## 📉 Compression Modes
 
-| Mode     | Formats    | Description                      |
-|----------|------------|----------------------------------|
-| Lossless | PNG, WebP  | No data loss, perfect quality    |
-| Lossy    | JPEG, WebP | Adjustable compression quality   |
+| Mode | Formats | Description |
+|------|---------|-------------|
+| Lossless | PNG, WebP | Exact match compression |
+| Lossy | JPEG, WebP | Adjustable quality |
 
 ---
 
 ## 🔍 CompressorService Logic Walkthrough
 
-1. **Gathers input** – file paths, output dir, user settings
-2. **Builds parameter struct** – converts Qt → C-compatible types
-3. **Calls Rust FFI function** – invokes `caesium_compress_image()`
-4. **Handles errors** – if false return, emits UI signal
-5. **Reports progress** – updates UI via signals/slots
+1. Collect user input (paths, settings)
+2. Create struct with compression params
+3. Convert to FFI-safe types for Rust
+4. Call `caesium_compress_image()` via FFI
+5. Emit progress + error signals to UI
 
 ---
 
-## 🚀 Performance & Optimization
+## 💡 Developer & Power User Ideas
 
-| Feature | Description |
-|--------|-------------|
-| **Multithreading** | QtConcurrent avoids UI freezing |
-| **Zero-copy Rust** | Efficient parsing where possible |
-| **Speed Benchmarks** | ~12s for 100x 4MB images |
-| **Memory Efficiency** | Only stores necessary buffers |
-
----
-
-## 🌐 Internationalization (i18n)
-
-| Step | Tool |
-|------|------|
-| Extract strings | `lupdate` |
-| Edit translations | Qt Linguist (`.ts` files) |
-| Compile to binary | `lrelease` produces `.qm` |
-| Add language | Copy + translate `.ts` file |
-
----
-
-## ⚖️ Trade-offs & Design Decisions
-
-### Rust vs. C++
-| Aspect | Rust | C++ |
-|--------|------|-----|
-| Memory safety | ✅ | ❌ (manual) |
-| Performance | ✅ | ✅ |
-| Build simplicity | ❌ (Cargo) | ✅ (CMake-only) |
-| Error handling | `Result<>` | Unchecked exceptions |
-
-### Qt vs. Other GUI Tools
-
-| Framework | Pros | Cons |
-|----------|------|------|
-| **Qt** | Native feel, stability | Heavier binaries |
-| Electron | Dev familiarity | High RAM usage |
-| Flutter | Fast UI dev | Less native integration |
-
----
-
-## 🧠 Future Scope
-
-### 💻 Developers
 - AVIF/HEIC support
-- GPU compression (OpenCL/Vulkan)
-- Plugin system (e.g., export to Imgur)
+- GPU acceleration (OpenCL, Vulkan)
+- CLI support, scheduled compression
+- Preset-based automation
+- Plugin system
 
-### 🖼 UI/UX
-- Live before/after preview
-- Smart tooltips, sliders
-- Right-click integration
+---
 
-### ☁️ Cloud / Scripting
-- HTML reports (size diff + visuals)
-- Auto-sync to cloud (S3, Firebase)
-- CLI & scheduled jobs
+## 🖼 Screenshots
 
-### 🧪 Experimental
-- AI-assisted compression
-- Realtime screenshot compression
+![Screenshot](https://raw.githubusercontent.com/Lymphatus/caesium-image-compressor/master/resources/screenshots/preferences_dialog.png)
+
+---
+
+## 🧪 Future Scope
+
+- AI-powered compression
+- Live side-by-side preview
+- Web-based comparison reports
+- Integration with CDN/cloud
 
 ---
 
@@ -252,52 +188,32 @@ pub extern "C" fn caesium_compress_image(input: *const c_char, output: *const c_
 
 | File | Role |
 |------|------|
-| `main.cpp` | Starts app + translations |
-| `MainWindow.cpp` | GUI controller |
-| `CompressorService.cpp` | Compression logic |
-| `FileListModel.cpp` | List of compressed files |
-| `ImagePreview.cpp` | Shows previews |
-| `FileItemDelegate.cpp` | Renders rows |
-| `Updater.cpp` | Checks online for updates |
-| `SparkleUpdater.mm` | Handles macOS updates |
+| `main.cpp` | App entry |
+| `MainWindow.cpp` | GUI logic |
+| `CompressorService.cpp` | Compression |
+| `FileListModel.cpp` | File state |
+| `FileItemDelegate.cpp` | Custom rendering |
+| `Updater.cpp`, `SparkleUpdater.mm` | Update system |
 
 ---
 
-## 🛠 Installation
+## ✅ Summary
 
-### Windows
-1. Download installer from [Releases](https://github.com/Lymphatus/caesium-image-compressor/releases)
-2. Run the `.exe`
-
-### macOS
-1. Download `.dmg` and drag to Applications
-
-### Linux
-```bash
-git clone https://github.com/Lymphatus/caesium-image-compressor.git
-cd caesium-image-compressor
-cmake -B build
-cmake --build build --config Release
-```
+Caesium brings together:
+- Qt for cross-platform UI
+- Rust for fast, safe compression logic
+- CMake + Cargo for flexible builds
 
 ---
 
 ## 👥 Contributors
 
-- Aaditya Kaushik – 202401001  
-- Akshay Das – 202401011  
-- Darsh Valand – 202401045  
-- Harshit Goyal – 202401065  
+- Aaditya Kaushik - 202401001  
+- Akshay Das - 202401011  
+- Darsh Valand - 202401045  
+- Harshit Goyal - 202401065  
 
 ---
 
-## 📄 License
-
-Licensed under the MIT License. See [LICENSE](./LICENSE) for more info.
-
----
-
-## 🔗 Links
-
-- 🌐 [Official Website](https://caesium.app)  
-- 🧑‍💻 [GitHub Repo](https://github.com/Lymphatus/caesium-image-compressor)
+**GitHub**: [github.com/Lymphatus/caesium-image-compressor](https://github.com/Lymphatus/caesium-image-compressor)  
+**Web Demo**: [caesium.app](https://caesium.app)
