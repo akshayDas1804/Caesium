@@ -284,7 +284,10 @@ cmake --build build --config Release
 ```
 
 ---
-
+# Demonstration Of Image Compression
+-Original Photo
+![image alt](https://github.com/akshayDas1804/Caesium/blob/main/Original%20Photo.png?raw=true)
+---
 ## 👥 Contributors
 
 - Aaditya Kaushik – 202401001  
