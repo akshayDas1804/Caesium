@@ -285,16 +285,22 @@ cmake --build build --config Release
 
 ---
 # Demonstration Of Image Compression
-#Original Photo
+# Original Photo
 ![image alt](https://github.com/akshayDas1804/Caesium/blob/main/Original%20Photo.png?raw=true)
 
-#Lossy Compressed Photo
+# Lossy Compressed Photo
 ![image alt](https://github.com/akshayDas1804/Caesium/blob/main/Lossy%20Compression.png?raw=true)
 
 # Lossless Compressed Photo
 ![image alt](https://github.com/akshayDas1804/Caesium/blob/main/Lossless%20Compression.png?raw=true)
 ---
+
+## Summary
+Caesium is a powerful, offline image compression tool that offers both lossless and lossy optimization for formats like JPEG, PNG, and WebP. Its lightweight design and fast performance make it ideal for everyday image compression without compromising quality. Unlike cloud-based solutions, Caesium runs entirely on your system, ensuring full privacy and data control.We personally used Caesium extensively to optimize images for online form submissions, where reduced image size significantly improved upload times and compatibility with various portals. It proved to be an essential utility for managing photo size efficiently and securely.
+---
+
 ## 👥 Contributors
+
 
 - Aaditya Kaushik – 202401001  
 - Akshay Das – 202401011  
