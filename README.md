@@ -9,7 +9,10 @@
 </p>
 
 ---
+# UI/UX of Caesium Website
+![image alt](https://github.com/akshayDas1804/Caesium/blob/main/UI%20Photo.png?raw=true)
 
+---
 ## ❓ What is Caesium?
 
 Caesium is a native image compression tool that reduces image size while preserving quality. Unlike cloud-based compressors like TinyPNG or Squoosh, Caesium works entirely offline — no uploads, no data collection.
