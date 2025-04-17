@@ -285,8 +285,14 @@ cmake --build build --config Release
 
 ---
 # Demonstration Of Image Compression
--Original Photo
+#Original Photo
 ![image alt](https://github.com/akshayDas1804/Caesium/blob/main/Original%20Photo.png?raw=true)
+
+#Lossy Compressed Photo
+![image alt](https://github.com/akshayDas1804/Caesium/blob/main/Lossy%20Compression.png?raw=true)
+
+# Lossless Compressed Photo
+![image alt](https://github.com/akshayDas1804/Caesium/blob/main/Lossless%20Compression.png?raw=true)
 ---
 ## 👥 Contributors
 
